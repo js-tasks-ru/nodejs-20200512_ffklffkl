@@ -9,17 +9,18 @@ class LineSplitStream extends stream.Transform {
 
   _transform(chunk, _, callback) {
     this.data += chunk;
+
     if (~this.data.indexOf(os.EOL)) {
-      const [consumed, current] = this.data.split(os.EOL);
-      this.data = current;
-      callback(null, consumed);
-    } else {
-      callback();
+      const lines = this.data.split(os.EOL);
+      this.data = lines.pop();
+      for (const line of lines) this.push(line);
     }
+
+    callback();
   }
 
   _flush(callback) {
-    callback(null, this.data);
+    this.data && callback(null, this.data);
   }
 }
 
