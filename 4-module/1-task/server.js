@@ -17,12 +17,9 @@ server.on('request', async (req, res) => {
         res.end('Not implemented');
     }
   } catch (err) {
-    console.error(err);
     res.statusCode = 500;
     res.end('Internal Error');
   }
 });
-
-server.on('error', (err) => console.error(err));
 
 module.exports = server;

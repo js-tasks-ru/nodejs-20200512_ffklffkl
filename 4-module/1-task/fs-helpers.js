@@ -6,7 +6,6 @@ async function access(path) {
     await fsPromises.access(path, fs.constants.F_OK | fs.constants.W_OK);
     return true;
   } catch (err) {
-    console.error(err);
     return false;
   }
 }
