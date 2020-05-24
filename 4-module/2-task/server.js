@@ -16,6 +16,12 @@ server.on('request', (req, res) => {
     return;
   }
 
+  if (req.headers['content-length'] === '0') {
+    res.statusCode = 409;
+    res.end();
+    return;
+  }
+
   switch (req.method) {
     case 'POST':
       const limitSize = new LimitSizeStream({limit: 1024 * 1024});
