@@ -19,8 +19,13 @@ server.on('request', (req, res) => {
     case 'DELETE':
       fs.unlink(filepath, (err) => {
         if (err) {
-          res.statusCode = 404;
-          res.end('File Not Found');
+          if (err.code === 'ENOENT') {
+            res.statusCode = 404;
+            res.end('Not found');
+          } else {
+            res.statusCode = 500;
+            res.end('Internal error');
+          }
         } else {
           res.end('File deleted successfully');
         }
