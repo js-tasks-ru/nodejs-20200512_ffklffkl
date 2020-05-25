@@ -13,9 +13,11 @@ const NOOP = () => undefined;
 server.on('request', (req, res) => {
   const pathname = url.parse(req.url).pathname.slice(1);
   const filepath = path.join(__dirname, 'files', pathname);
+  const contentLength = Number(req.headers['content-length']);
 
   if (pathname.includes('/') || pathname.includes('..')) return sendResponse(400);
-  if (req.headers['content-length'] > SIZE_LIMIT) return sendResponse(413);
+  if (contentLength === 0) return sendResponse(409);
+  if (contentLength > SIZE_LIMIT) return sendResponse(413);
 
   switch (req.method) {
     case 'POST':
