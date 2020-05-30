@@ -1,3 +1,14 @@
+const Category = require('../models/Category');
+
 module.exports.categoryList = async function categoryList(ctx, next) {
-  ctx.body = {categories: []};
+  const categories = await Category.find();
+  ctx.body = {categories: categories.map(mapCategory)};
 };
+
+function mapCategory({_id, title, subcategories}) {
+  return {
+    title,
+    id: _id,
+    subcategories: subcategories.map(({_id, title}) => ({title, id: _id})),
+  };
+}
