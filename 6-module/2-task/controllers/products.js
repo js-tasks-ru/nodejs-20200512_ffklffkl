@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 
 module.exports.productsBySubcategory = async function productsBySubcategory(ctx, next) {
   if (ctx.query.subcategory) {
-    const products = await Product.find({subcategory: ctx.query.subcategory});
+    const products = await Product.find({subcategory: ctx.query.subcategory}).limit(20);
     ctx.body = {products: products.map(mapProduct)};
   } else {
     return next();
@@ -10,7 +10,7 @@ module.exports.productsBySubcategory = async function productsBySubcategory(ctx,
 };
 
 module.exports.productList = async function productList(ctx, next) {
-  const products = await Product.find();
+  const products = await Product.find().limit(20);
   ctx.body = {products: products.map(mapProduct)};
 };
 

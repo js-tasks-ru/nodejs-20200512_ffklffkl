@@ -12,6 +12,7 @@ server.on('request', async (req, res) => {
   if (pathname.includes('/') || pathname.includes('..')) {
     res.statusCode = 400;
     res.end('Nested paths are not allowed');
+    return;
   }
 
   switch (req.method) {

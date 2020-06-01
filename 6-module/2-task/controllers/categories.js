@@ -1,7 +1,7 @@
 const Category = require('../models/Category');
 
 module.exports.categoryList = async function categoryList(ctx, next) {
-  const categories = await Category.find();
+  const categories = await Category.find().limit(20);
   ctx.body = {categories: categories.map(mapCategory)};
 };
 
