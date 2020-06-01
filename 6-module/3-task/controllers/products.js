@@ -1,13 +1,13 @@
 const Product = require('../models/Product');
 
 module.exports.productsByQuery = async function productsByQuery(ctx, next) {
-  if (typeof ctx.query.query !== 'string') ctx.throw(400);
+  const {query} = ctx.query;
+  if (!query) ctx.throw(400);
+
   const products = await Product
-      .find(
-          {$text: {$search: ctx.query.query}},
-          {score: {$meta: 'textScore'}}
-      )
-      .sort({score: {$meta: 'textScore'}});
+      .find({$text: {$search: query}}, {score: {$meta: 'textScore'}})
+      .sort({score: {$meta: 'textScore'}})
+      .limit(20);
   ctx.body = {products: products.map(mapProduct)};
 };
 
