@@ -6,16 +6,10 @@ module.exports.register = async (ctx, next) => {
   const {email, displayName, password} = ctx.request.body;
   const verificationToken = uuid();
   const user = new User({email, displayName, password, verificationToken});
-  await user.setPassword(password);
 
-  try {
-    await user.save();
-  } catch (err) {
-    const message = err.errors && err.errors.email && err.errors.email.properties.message;
-    ctx.status = 400;
-    ctx.body = {errors: {email: message}};
-    return;
-  }
+  await user.setPassword(password);
+  await user.save();
+
   await sendMail({
     template: 'confirmation',
     locals: {token: verificationToken},
